@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: lenses-schedule-service
+  profiles:
+    active: dev

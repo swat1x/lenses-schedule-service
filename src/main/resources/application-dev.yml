@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/lenses_db
+    username: lenses_bot
+    password: ab467b5a-0c18-451d-be38-3c35a8bb21d8
+  jpa:
+    hibernate:
+      ddl-auto: update
+  kafka:
+    template:
+      default-topic: 'notifications'
+
+schedule:
+  kafka:
+    host: 'localhost:9092'
