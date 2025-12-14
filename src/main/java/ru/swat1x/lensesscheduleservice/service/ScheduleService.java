@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -32,5 +34,14 @@ public interface ScheduleService {
      * */
     @NotNull
     ScheduleModel updateSchedule(@NotNull UUID targetScheduleId, @NotNull ScheduleModel newScheduleInfo);
+
+    /**
+     * Поиск подходящих для уведомления расписаний
+     *
+     * @param plusDelta добавочный временной отрезок, в котором будут искаться расписания
+     * */
+    List<ScheduleModel> findSuitableSchedules(Duration plusDelta);
+
+    ScheduleModel markScheduleAsNotified(@NotNull ScheduleModel scheduleModel);
 
 }

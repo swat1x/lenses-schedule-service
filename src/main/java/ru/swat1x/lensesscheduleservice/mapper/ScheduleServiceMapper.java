@@ -4,6 +4,8 @@ import org.mapstruct.*;
 import ru.swat1x.lensesscheduleservice.entity.ScheduleEntity;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
 
+import java.util.List;
+
 /**
  * @author swat1x (Vadim Smyshlyaev)
  * Created at 12.12.2025
@@ -18,6 +20,8 @@ import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
 public interface ScheduleServiceMapper {
 
     ScheduleModel toModel(ScheduleEntity entity);
+
+    List<ScheduleModel> toModel(List<ScheduleEntity> entityList);
 
     ScheduleModel mapModel(@MappingTarget ScheduleModel target, ScheduleModel model);
 

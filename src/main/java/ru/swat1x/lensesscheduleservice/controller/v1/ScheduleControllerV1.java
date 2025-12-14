@@ -21,4 +21,7 @@ public interface ScheduleControllerV1 {
     @PostMapping("/updateSchedule")
     ScheduleModel updateSchedule(@RequestBody ScheduleModel scheduleModel);
 
+    @PostMapping("/callLensesUpdate")
+    ScheduleModel callLensesUpdate(@RequestParam(name = "scheduleId") UUID scheduleId);
+
 }

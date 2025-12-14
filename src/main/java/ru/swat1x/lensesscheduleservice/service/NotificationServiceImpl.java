@@ -24,6 +24,7 @@ import java.util.UUID;
 public class NotificationServiceImpl implements NotificationService {
 
     KafkaTemplate<UUID, UpdateNotificationModel> notificationsTemplate;
+    ScheduleService scheduleService;
 
     @Override
     public UpdateNotificationModel publishToNotifications(@NonNull ScheduleModel scheduleModel) {
@@ -39,8 +40,11 @@ public class NotificationServiceImpl implements NotificationService {
                 .setSchedule(scheduleModel)
                 .setNotificationDateTime(zonedDateTime);
 
+        // Маркируем как уведомленный
+        this.scheduleService.markScheduleAsNotified(scheduleModel);
+
         // Публикация в кафку
-        notificationsTemplate.sendDefault(notificationId, updateNotificationModel);
+        this.notificationsTemplate.sendDefault(notificationId, updateNotificationModel);
 
         return updateNotificationModel;
     }

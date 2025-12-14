@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.RestController;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
+import ru.swat1x.lensesscheduleservice.service.NotificationService;
 import ru.swat1x.lensesscheduleservice.service.ScheduleService;
 
 import java.util.UUID;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class ScheduleControllerImplV1 implements ScheduleControllerV1 {
 
     ScheduleService service;
+    NotificationService notificationService;
 
     @Override
     public ScheduleModel getScheduleById(UUID scheduleId) {
@@ -28,12 +30,19 @@ public class ScheduleControllerImplV1 implements ScheduleControllerV1 {
 
     @Override
     public ScheduleModel createNewSchedule(ScheduleModel scheduleModel) {
-        return service.createNewSchedule(scheduleModel);
+        var schedule =  service.createNewSchedule(scheduleModel);
+        this.notificationService.publishToNotifications(schedule);
+        return schedule;
     }
 
     @Override
     public ScheduleModel updateSchedule(ScheduleModel scheduleModel) {
         return service.updateSchedule(scheduleModel.getScheduleId(), scheduleModel);
+    }
+
+    @Override
+    public ScheduleModel callLensesUpdate(UUID scheduleId) {
+        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.swat1x.lensesscheduleservice.model;
 
+import jakarta.persistence.Column;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-//@Accessors(chain = true)
+@Accessors(chain = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScheduleModel {
 
@@ -29,9 +30,9 @@ public class ScheduleModel {
 
     LocalTime notificationTime;
 
-    Long lastUpdateInstant;
+    Long plannedNotificationTimestamp;
 
-    Long lastNotificationInstant;
+    Long lastNotificationTimestamp;
 
     Boolean isNotified;
 

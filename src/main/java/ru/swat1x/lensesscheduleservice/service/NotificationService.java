@@ -4,6 +4,9 @@ import lombok.NonNull;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
 import ru.swat1x.lensesscheduleservice.model.UpdateNotificationModel;
 
+import java.time.Duration;
+import java.util.List;
+
 /**
  * @author swat1x (Vadim Smyshlyaev)
  * Created at 11.12.2025
@@ -16,5 +19,6 @@ public interface NotificationService {
      * @return отправленная на уведомление модель
      * */
     UpdateNotificationModel publishToNotifications(@NonNull ScheduleModel scheduleModel);
+
 
 }

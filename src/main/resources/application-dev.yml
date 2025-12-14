@@ -10,6 +10,18 @@ spring:
   kafka:
     template:
       default-topic: 'notifications'
+  quartz:
+    job-store-type: memory
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: dev-scheduler
+            instanceId: AUTO
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
 
 schedule:
   kafka:

@@ -20,7 +20,7 @@ import java.util.UUID;
 @ToString
 @Getter
 @Setter
-//@Accessors(chain = true)
+@Accessors(chain = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScheduleEntity {
 
@@ -38,11 +38,11 @@ public class ScheduleEntity {
     @Column(name = "notification_time")
     LocalTime notificationTime;
 
-    @Column(name = "last_update_instant")
-    Long lastUpdateInstant;
+    @Column(name = "planned_notification_timestamp")
+    Long plannedNotificationTimestamp;
 
-    @Column(name = "last_notification_instant")
-    Long lastNotificationInstant;
+    @Column(name = "last_notification_timestamp")
+    Long lastNotificationTimestamp;
 
     @Column(name = "is_notified")
     Boolean isNotified;
