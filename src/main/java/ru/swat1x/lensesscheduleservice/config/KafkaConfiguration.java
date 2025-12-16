@@ -62,7 +62,7 @@ public class KafkaConfiguration {
     @Bean
     public NewTopic notificationTopic() {
         return TopicBuilder.name(NOTIFICATION_TOPIC)
-                .partitions(3)
+                .partitions(6)
 //                .replicas(2)
                 .compact()
                 .build();

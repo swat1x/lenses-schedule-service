@@ -26,10 +26,10 @@ public interface ScheduleServiceMapper {
     ScheduleModel mapModel(@MappingTarget ScheduleModel target, ScheduleModel model);
 
     @Mapping(target = "scheduleId", ignore = true)
-    ScheduleEntity mapEntity(ScheduleModel model);
+    ScheduleEntity toEntity(ScheduleModel model);
 
     @Mapping(target = "scheduleId", ignore = true)
-    ScheduleEntity mapEntity(@MappingTarget ScheduleEntity entity, ScheduleModel model);
+    ScheduleEntity toEntity(@MappingTarget ScheduleEntity entity, ScheduleModel model);
 
 
 }

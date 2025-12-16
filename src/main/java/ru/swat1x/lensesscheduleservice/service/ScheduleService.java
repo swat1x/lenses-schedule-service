@@ -16,6 +16,8 @@ public interface ScheduleService {
 
     ScheduleModel getScheduleById(UUID scheduleId);
 
+    ScheduleModel callLensesUpdate(UUID scheduleId);
+
     /**
      * Создание нового расписания исходя из заданных параметров
      *

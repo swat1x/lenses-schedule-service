@@ -13,8 +13,8 @@ import ru.swat1x.lensesscheduleservice.mapper.ScheduleServiceMapper;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
 import ru.swat1x.lensesscheduleservice.repository.ScheduleRepository;
 
-import java.time.Duration;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +46,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleEntity.setIsNotified(false);
 
         if (scheduleModel != null) {
-            scheduleEntity = this.mapper.mapEntity(scheduleEntity, scheduleModel);
+            scheduleEntity = this.mapper.toEntity(scheduleEntity, scheduleModel);
         }
 
         return scheduleEntity;
@@ -55,6 +55,28 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleModel getScheduleById(UUID scheduleId) {
         return mapper.toModel(findScheduleById(scheduleId));
+    }
+
+    private Instant calculateNextNotificationDate(ScheduleEntity scheduleEntity) {
+        var zoneId = ZoneId.of(scheduleEntity.getTimeZone());
+        var notifyInstant = LocalDate.now(zoneId)
+                .plusDays(scheduleEntity.getInterval())
+                .atTime(scheduleEntity.getNotificationTime())
+                .atZone(zoneId)
+                .toInstant();
+        return notifyInstant;
+    }
+
+    @Override
+    public ScheduleModel callLensesUpdate(UUID scheduleId) {
+        var schedule = findScheduleById(scheduleId);
+        var nextNotificationInstant = calculateNextNotificationDate(schedule);
+
+        schedule.setIsNotified(false);
+        schedule.setPlannedNotificationTimestamp(nextNotificationInstant.toEpochMilli());
+        schedule = repository.save(schedule);
+
+        return mapper.toModel(schedule);
     }
 
     @Override
@@ -70,7 +92,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public @NotNull ScheduleModel updateSchedule(@NotNull UUID targetScheduleId, @NotNull ScheduleModel newScheduleInfo) {
         var scheduleEntity = findScheduleById(targetScheduleId);
-        scheduleEntity = this.mapper.mapEntity(scheduleEntity, newScheduleInfo);
+        scheduleEntity = this.mapper.toEntity(scheduleEntity, newScheduleInfo);
         scheduleEntity = this.repository.save(scheduleEntity);
         return this.mapper.toModel(scheduleEntity);
     }
@@ -87,6 +109,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleModel markScheduleAsNotified(@NotNull ScheduleModel scheduleModel) {
         var scheduleEntity = findScheduleById(scheduleModel.getScheduleId());
         scheduleEntity.setIsNotified(true);
+        scheduleEntity.setLastNotificationTimestamp(System.currentTimeMillis());
         scheduleEntity = this.repository.save(scheduleEntity);
         return this.mapper.toModel(scheduleEntity);
     }

@@ -1,5 +1,6 @@
 package ru.swat1x.lensesscheduleservice.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,11 +13,13 @@ import ru.swat1x.lensesscheduleservice.exception.response.ServiceException;
  * @author swat1x (Vadim Smyshlyaev)
  * Created at 29.11.2025
  */
+@Slf4j
 @ControllerAdvice
 public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Throwable.class})
     public ResponseEntity<ExceptionResponseModel> handleStandardException(Throwable throwable) {
+        log.error("Handling service exception", throwable);
         var serviceException = new ServiceException(
                 throwable.getClass().getName() + ": " + throwable.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR
