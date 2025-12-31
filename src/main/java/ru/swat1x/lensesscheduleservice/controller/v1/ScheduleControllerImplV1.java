@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
+import ru.swat1x.lensesscheduleservice.model.UpdateNotificationModel;
 import ru.swat1x.lensesscheduleservice.service.NotificationService;
 import ru.swat1x.lensesscheduleservice.service.ScheduleService;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -40,7 +44,7 @@ public class ScheduleControllerImplV1 implements ScheduleControllerV1 {
     @Override
     public ScheduleModel createNewSchedule(ScheduleModel scheduleModel) {
         var schedule =  scheduleService.createNewSchedule(scheduleModel);
-        this.notificationService.publishToNotifications(schedule);
+//        this.notificationService.publishToNotifications(schedule);
         return schedule;
     }
 
@@ -52,6 +56,16 @@ public class ScheduleControllerImplV1 implements ScheduleControllerV1 {
     @Override
     public ScheduleModel callLensesUpdate(UUID scheduleId) {
         return scheduleService.callLensesUpdate(scheduleId);
+    }
+
+    @Override
+    public ScheduleModel changeLensesBirthday(UUID scheduleId, LocalDate localDate) {
+        return scheduleService.changeLensesBirthday(scheduleId, localDate);
+    }
+
+    @Override
+    public List<UpdateNotificationModel> pingLensesUpdate() {
+        return notificationService.publishSuitableSchedules(Duration.ofMinutes(5));
     }
 
 }

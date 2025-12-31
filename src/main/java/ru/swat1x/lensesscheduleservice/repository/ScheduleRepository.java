@@ -15,7 +15,7 @@ import java.util.UUID;
 @Repository
 public interface ScheduleRepository extends JpaRepository<ScheduleEntity, UUID> {
 
-    @Query("select se from ScheduleEntity se where se.isNotified is true and se.plannedNotificationTimestamp <= ?1")
+    @Query("select se from ScheduleEntity se where se.isNotified is false and se.plannedNotificationTimestamp <= ?1")
     List<ScheduleEntity> findSuitableSchedules(long toNotifyUntil);
 
 }

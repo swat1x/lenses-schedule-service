@@ -32,7 +32,7 @@ public class KafkaConfiguration {
 
     @Bean
     @SneakyThrows
-    public ProducerFactory<UUID, UpdateNotificationModel> producerFactory(@Value("${schedule.kafka.host}") String kafkaHost) {
+    public ProducerFactory<UUID, UpdateNotificationModel> producerFactory(@Value("${schedule.kafka.host:localhost:9092}") String kafkaHost) {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ProducerConfig.CLIENT_ID_CONFIG,
@@ -53,7 +53,7 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaAdmin admin(@Value("${schedule.kafka.host}") String kafkaHost) {
+    public KafkaAdmin admin(@Value("${schedule.kafka.host:localhost:9092}") String kafkaHost) {
         Map<String, Object> configs = new HashMap<>();
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaHost);
         return new KafkaAdmin(configs);

@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/bot
-    username: schedule_user
-    password: ab467b5a-0c18-451d-be38-3c35a8bb21d8
+    url: jdbc:postgresql://${DB_HOST:localhost:5432}/${DB_NAME:bot}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,4 +25,4 @@ spring:
 
 schedule:
   kafka:
-    host: localhost:29092
+    host: ${KAFKA_HOST}

@@ -3,8 +3,10 @@ package ru.swat1x.lensesscheduleservice.service;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
+import ru.swat1x.lensesscheduleservice.model.UpdateNotificationModel;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +38,9 @@ public interface ScheduleService {
      * */
     @NotNull
     ScheduleModel updateSchedule(@NotNull UUID targetScheduleId, @NotNull ScheduleModel newScheduleInfo);
+
+    @NotNull
+    ScheduleModel changeLensesBirthday(@NotNull UUID targetScheduleId, @NotNull LocalDate birthday);
 
     /**
      * Поиск подходящих для уведомления расписаний

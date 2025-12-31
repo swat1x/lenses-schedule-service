@@ -20,5 +20,7 @@ public interface NotificationService {
      * */
     UpdateNotificationModel publishToNotifications(@NonNull ScheduleModel scheduleModel);
 
+    List<UpdateNotificationModel> publishSuitableSchedules(Duration delta);
+
 
 }

@@ -1,8 +1,12 @@
 package ru.swat1x.lensesscheduleservice.controller.v1;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
+import ru.swat1x.lensesscheduleservice.model.UpdateNotificationModel;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,5 +27,12 @@ public interface ScheduleControllerV1 {
 
     @PostMapping("/callLensesUpdate")
     ScheduleModel callLensesUpdate(@RequestParam(name = "scheduleId") UUID scheduleId);
+
+    @PostMapping("/changeLensesBirthday")
+    ScheduleModel changeLensesBirthday(@RequestParam(name = "scheduleId") UUID scheduleId,
+                                       @RequestParam(name = "birthday") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate localDate);
+
+    @PostMapping("/pingLensesUpdate")
+    List<UpdateNotificationModel> pingLensesUpdate();
 
 }

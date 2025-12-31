@@ -4,19 +4,23 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
 import ru.swat1x.lensesscheduleservice.model.UpdateNotificationModel;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * @author swat1x (Vadim Smyshlyaev)
  * Created at 12.12.2025
  */
+@Slf4j
 @Service
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -45,8 +49,17 @@ public class NotificationServiceImpl implements NotificationService {
 
         // Публикация в кафку
         this.notificationsTemplate.sendDefault(notificationId, updateNotificationModel);
+        log.info("Sent update to broker: {}", updateNotificationModel);
 
         return updateNotificationModel;
+    }
+
+    @Override
+    public List<UpdateNotificationModel> publishSuitableSchedules(Duration delta) {
+        var schedules = scheduleService.findSuitableSchedules(delta);
+        return schedules.stream()
+                .map(this::publishToNotifications)
+                .toList();
     }
 
 }

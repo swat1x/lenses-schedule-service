@@ -11,6 +11,7 @@ import ru.swat1x.lensesscheduleservice.entity.ScheduleEntity;
 import ru.swat1x.lensesscheduleservice.exception.response.ScheduleNotFoundException;
 import ru.swat1x.lensesscheduleservice.mapper.ScheduleServiceMapper;
 import ru.swat1x.lensesscheduleservice.model.ScheduleModel;
+import ru.swat1x.lensesscheduleservice.model.UpdateNotificationModel;
 import ru.swat1x.lensesscheduleservice.repository.ScheduleRepository;
 
 import java.time.*;
@@ -67,6 +68,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         return notifyInstant;
     }
 
+    private Instant calculateNewBirthdayNotificationDate(ScheduleEntity scheduleEntity, LocalDate newBirthday) {
+        var zoneId = ZoneId.of(scheduleEntity.getTimeZone());
+        var notifyInstant = newBirthday
+                .atTime(scheduleEntity.getNotificationTime())
+                .plusDays(scheduleEntity.getInterval())
+                .atZone(zoneId)
+                .toInstant();
+        return notifyInstant;
+    }
+
     @Override
     public ScheduleModel callLensesUpdate(UUID scheduleId) {
         var schedule = findScheduleById(scheduleId);
@@ -94,6 +105,18 @@ public class ScheduleServiceImpl implements ScheduleService {
         var scheduleEntity = findScheduleById(targetScheduleId);
         scheduleEntity = this.mapper.toEntity(scheduleEntity, newScheduleInfo);
         scheduleEntity = this.repository.save(scheduleEntity);
+        return this.mapper.toModel(scheduleEntity);
+    }
+
+    @Override
+    public @NotNull ScheduleModel changeLensesBirthday(@NotNull UUID targetScheduleId, @NotNull LocalDate birthday) {
+        var scheduleEntity = findScheduleById(targetScheduleId);
+        var newNotifyDate = calculateNewBirthdayNotificationDate(scheduleEntity, birthday);
+
+        scheduleEntity.setIsNotified(false);
+        scheduleEntity.setPlannedNotificationTimestamp(newNotifyDate.toEpochMilli());
+        scheduleEntity = this.repository.save(scheduleEntity);
+
         return this.mapper.toModel(scheduleEntity);
     }
 
